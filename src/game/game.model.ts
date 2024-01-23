@@ -38,18 +38,15 @@ export class Game extends Model {
   @HasMany(() => GameHistory)
   history: GameHistory[];
 
-  @Column({ defaultValue: 9 })
-  rows: number;
-
-  @Column({ defaultValue: 9 })
-  cols: number;
+  @Column({ field: 'creation_date', defaultValue: Date.now() })
+  creationDate: Date;
 
   @Column({ defaultValue: 0 })
   time: number;
 
-  @Column({ defaultValue: 0 })
-  score: number;
-
   @Column({ type: DataTypes.ENUM(typeof Status) })
   status: Status;
+
+  @Column({ defaultValue: 0 })
+  score: number;
 }
