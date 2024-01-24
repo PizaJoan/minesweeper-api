@@ -6,9 +6,9 @@ import { Cookies } from 'src/decorators/cookies.decorator';
 import { YEAR } from 'src/constants/miliseconds';
 import { User } from './user.model';
 
-@Controller('/users')
+@Controller('/user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private userService: UserService) {}
 
   @Get('/init')
   async initUser(
