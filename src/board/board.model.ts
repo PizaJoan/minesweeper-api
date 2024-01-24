@@ -7,7 +7,7 @@ import {
   Table,
   HasOne,
 } from 'sequelize-typescript';
-import { Cell, Difficulty } from './board.types';
+import { Difficulty } from './board.types';
 import { Game } from 'src/game/game.model';
 
 @Table({ tableName: 'board', createdAt: false, updatedAt: false })
@@ -27,7 +27,7 @@ export class Board extends Model {
   difficulty: Difficulty;
 
   @Column({ field: 'json_board', type: DataTypes.JSON })
-  jsonBoard: Cell[][];
+  jsonBoard: number[][];
 
   @HasOne(() => Game)
   game: Game;

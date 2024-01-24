@@ -1,21 +1,20 @@
 import { Injectable } from '@nestjs/common';
+
 import { BoardRepository } from './board.repository';
-import { Cell, Difficulty } from './board.types';
-import { MINES } from 'src/constants/board/mines';
-import { COLS, ROWS } from 'src/constants/board/size';
 import { Board } from './board.model';
+import { Difficulty } from './board.types';
+import { MINES } from 'src/constants/board/mines';
+
+import { InitGameDTO } from 'src/game/game.types';
+
+import { COLS, ROWS } from 'src/constants/board/size';
 import { BOMB_PROXIMITY } from 'src/constants/board/bomb-proximity';
 
 @Injectable()
 export class BoardService {
   constructor(private boardRepository: BoardRepository) {}
 
-  async initBoard(difficulty: Difficulty): Promise<Board>;
-  async initBoard(
-    difficulty: Difficulty,
-    rows?: number,
-    cols?: number,
-  ): Promise<Board> {
+  async initBoard({ difficulty, rows, cols }: InitGameDTO): Promise<Board> {
     const [boardRows, boardCols] =
       difficulty !== Difficulty.custom
         ? this.getBoardSize(difficulty)
@@ -38,13 +37,13 @@ export class BoardService {
     return [ROWS[difficulty], COLS[difficulty]];
   }
 
-  private getBoardEmptyBoard(rows: number, cols: number): Cell[][] {
-    return Array<Cell[]>(cols)
+  private getBoardEmptyBoard(rows: number, cols: number): number[][] {
+    return Array<number[]>(cols)
       .fill([])
       .map(() =>
-        Array<Cell>(rows)
-          .fill({ num: 0 })
-          .map(() => ({ num: 0 })),
+        Array<number>(rows)
+          .fill(0)
+          .map(() => 0),
       );
   }
 
@@ -60,23 +59,23 @@ export class BoardService {
     return MINES[difficulty];
   }
 
-  private fillBoard(board: Cell[][], mines: number): Cell[][] {
+  private fillBoard(board: number[][], mines: number): number[][] {
     let counter = 0;
 
     while (counter < mines) {
       const firstNum = Math.floor(Math.random() * board.length);
       const secondNum = Math.floor(Math.random() * board[0].length);
 
-      if (!isNaN(board[firstNum][secondNum].num)) {
-        board[firstNum][secondNum].num = NaN;
+      if (!isNaN(board[firstNum][secondNum])) {
+        board[firstNum][secondNum] = NaN;
 
         for (let i = 0; i < BOMB_PROXIMITY.length; i++) {
           const [row, col] = BOMB_PROXIMITY[i];
 
-          const cell = board[firstNum + row][secondNum + col];
+          const cell = board[firstNum + row]?.[secondNum + col];
 
-          if (cell && !isNaN(cell.num)) {
-            cell.num++;
+          if (cell && !isNaN(cell)) {
+            board[firstNum + row][secondNum + col]++;
           }
         }
 
