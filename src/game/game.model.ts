@@ -1,18 +1,19 @@
 import { DataTypes } from 'sequelize';
 import {
-  Model,
   AutoIncrement,
+  BelongsTo,
   Column,
+  ForeignKey,
+  HasMany,
+  Model,
   PrimaryKey,
   Table,
-  ForeignKey,
-  BelongsTo,
-  HasMany,
 } from 'sequelize-typescript';
-import { Status } from './game.types';
-import { User } from 'src/user/user.model';
+
 import { Board } from 'src/board/board.model';
 import { GameHistory } from 'src/game-history/game-history.model';
+import { User } from 'src/user/user.model';
+import { Status } from './game.types';
 
 @Table({ tableName: 'game', createdAt: false, updatedAt: false })
 export class Game extends Model {

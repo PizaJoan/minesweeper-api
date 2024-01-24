@@ -6,6 +6,7 @@ import {
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
+
 import { Game } from 'src/game/game.model';
 
 @Table({ tableName: 'user', createdAt: false, updatedAt: false })

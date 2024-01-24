@@ -1,14 +1,15 @@
 import { DataTypes } from 'sequelize';
 import {
-  Model,
   AutoIncrement,
   Column,
+  HasOne,
+  Model,
   PrimaryKey,
   Table,
-  HasOne,
 } from 'sequelize-typescript';
-import { Difficulty } from './board.types';
+
 import { Game } from 'src/game/game.model';
+import { Difficulty } from './board.types';
 
 @Table({ tableName: 'board', createdAt: false, updatedAt: false })
 export class Board extends Model {

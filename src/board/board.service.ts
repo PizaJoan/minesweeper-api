@@ -1,14 +1,12 @@
 import { Injectable } from '@nestjs/common';
 
-import { BoardRepository } from './board.repository';
-import { Board } from './board.model';
-import { Difficulty } from './board.types';
-import { MINES } from 'src/constants/board/mines';
-
-import { InitGameDTO } from 'src/game/game.types';
-
-import { COLS, ROWS } from 'src/constants/board/size';
 import { BOMB_PROXIMITY } from 'src/constants/board/bomb-proximity';
+import { MINES } from 'src/constants/board/mines';
+import { COLS, ROWS } from 'src/constants/board/size';
+import { InitGameDTO } from 'src/game/game.types';
+import { Board } from './board.model';
+import { BoardRepository } from './board.repository';
+import { Difficulty } from './board.types';
 
 @Injectable()
 export class BoardService {

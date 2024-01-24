@@ -1,12 +1,13 @@
 import {
-  Model,
   AutoIncrement,
+  BelongsTo,
   Column,
+  ForeignKey,
+  Model,
   PrimaryKey,
   Table,
-  ForeignKey,
-  BelongsTo,
 } from 'sequelize-typescript';
+
 import { Game } from 'src/game/game.model';
 
 @Table({ tableName: 'game_history', createdAt: false, updatedAt: false })

@@ -1,13 +1,10 @@
 import { Body, Controller, Post } from '@nestjs/common';
 
+import { BoardService } from 'src/board/board.service';
+import { Cookies } from 'src/decorators/cookies.decorator';
+import { User } from 'src/user/user.model';
 import { GameService } from './game.service';
 import { InitGameDTO } from './game.types';
-
-import { BoardService } from 'src/board/board.service';
-
-import { User } from 'src/user/user.model';
-
-import { Cookies } from 'src/decorators/cookies.decorator';
 
 @Controller('/game')
 export class GameController {
