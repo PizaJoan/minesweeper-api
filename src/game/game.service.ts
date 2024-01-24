@@ -1,15 +1,14 @@
 import { Injectable } from '@nestjs/common';
+
+import { Board } from 'src/board/board.model';
+import { User } from 'src/user/user.model';
 import { GameRepository } from './game.repository';
 
 @Injectable()
 export class GameService {
   constructor(private gameRepository: GameRepository) {}
 
-  async getHello() {
-    const result = await this.gameRepository.getHello();
-
-    console.log(result);
-
-    return result;
+  async initGame(user: User, board: Board) {
+    return null;
   }
 }
