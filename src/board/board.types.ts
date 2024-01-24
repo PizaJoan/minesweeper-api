@@ -7,6 +7,12 @@ export enum Difficulty {
 
 export interface Cell {
   num: number;
-  isFlag: boolean;
-  revealed: boolean;
+  isFlag?: boolean;
+}
+
+export interface CreateBoardDTO {
+  rows: number;
+  cols: number;
+  difficulty: Difficulty;
+  board: Cell[][];
 }
