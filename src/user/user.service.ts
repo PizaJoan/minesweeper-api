@@ -5,11 +5,7 @@ import { UserRepository } from './user.respository';
 export class UserService {
   constructor(private userRepository: UserRepository) {}
 
-  async getHello() {
-    const result = await this.userRepository.getHello();
-
-    console.log(result);
-
-    return result;
+  async initUser() {
+    return await this.userRepository.createUser();
   }
 }

@@ -6,8 +6,8 @@ import { InjectModel } from '@nestjs/sequelize';
 export class UserRepository {
   constructor(@InjectModel(User) private userModel: typeof User) {}
 
-  async getHello() {
-    const result = await this.userModel.findOne();
+  async createUser() {
+    const result = await this.userModel.create();
 
     console.log(result);
 
