@@ -23,7 +23,7 @@ export class BoardService {
       mines,
     );
 
-    return await this.boardRepository!.createBoard({
+    return await this.boardRepository.createBoard({
       rows: boardRows,
       cols: boardCols,
       difficulty,

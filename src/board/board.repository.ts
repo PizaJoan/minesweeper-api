@@ -16,8 +16,6 @@ export class BoardRepository {
       difficulty,
     });
 
-    console.log(result);
-
     return result;
   }
 }
