@@ -4,7 +4,6 @@ import { BOMB_PROXIMITY } from 'src/constants/board/bomb-proximity';
 import { MINES } from 'src/constants/board/mines';
 import { COLS, ROWS } from 'src/constants/board/size';
 import { InitGameDTO } from 'src/game/game.types';
-import { Board } from './board.model';
 import { BoardRepository } from './board.repository';
 import { Difficulty } from './board.types';
 
@@ -12,18 +11,19 @@ import { Difficulty } from './board.types';
 export class BoardService {
   constructor(private boardRepository: BoardRepository) {}
 
-  async initBoard({ difficulty, rows, cols }: InitGameDTO): Promise<Board> {
+  async initBoard({ difficulty, rows, cols }: InitGameDTO) {
     const [boardRows, boardCols] =
       difficulty !== Difficulty.custom
         ? this.getBoardSize(difficulty)
         : [Number(rows), Number(cols)];
 
-    const emptyBoard = this.getBoardEmptyBoard(boardRows, boardCols);
-
     const mines = this.getMines(difficulty, rows, cols);
-    const board = this.fillBoard(emptyBoard, mines);
+    const board = this.fillBoard(
+      this.getBoardEmptyBoard(boardRows, boardCols),
+      mines,
+    );
 
-    return await this.boardRepository.createBoard({
+    return await this.boardRepository!.createBoard({
       rows: boardRows,
       cols: boardCols,
       difficulty,
@@ -64,16 +64,16 @@ export class BoardService {
       const firstNum = Math.floor(Math.random() * board.length);
       const secondNum = Math.floor(Math.random() * board[0].length);
 
-      if (!isNaN(board[firstNum][secondNum])) {
-        board[firstNum][secondNum] = NaN;
+      if (board[firstNum][secondNum] !== -1) {
+        board[firstNum][secondNum] = -1;
 
         for (let i = 0; i < BOMB_PROXIMITY.length; i++) {
           const [row, col] = BOMB_PROXIMITY[i];
 
           const cell = board[firstNum + row]?.[secondNum + col];
 
-          if (cell && !isNaN(cell)) {
-            board[firstNum + row][secondNum + col]++;
+          if (cell >= 0) {
+            board[firstNum + row]![secondNum + col]! += 1;
           }
         }
 
