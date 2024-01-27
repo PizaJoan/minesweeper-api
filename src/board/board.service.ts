@@ -36,10 +36,10 @@ export class BoardService {
   }
 
   private getBoardEmptyBoard(rows: number, cols: number): number[][] {
-    return Array<number[]>(cols)
+    return Array<number[]>(rows)
       .fill([])
       .map(() =>
-        Array<number>(rows)
+        Array<number>(cols)
           .fill(0)
           .map(() => 0),
       );

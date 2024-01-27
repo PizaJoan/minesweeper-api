@@ -9,6 +9,8 @@ export class GameService {
   constructor(private gameRepository: GameRepository) {}
 
   async initGame(user: User, board: Board) {
-    return null;
+    const game = await this.gameRepository.initGame(user, board);
+
+    return game;
   }
 }

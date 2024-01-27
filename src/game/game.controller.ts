@@ -20,6 +20,8 @@ export class GameController {
   ) {
     const board = await this.boardService.initBoard(initGameDto);
 
+    this.gameService.initGame(user, board);
+
     return board;
   }
 }
