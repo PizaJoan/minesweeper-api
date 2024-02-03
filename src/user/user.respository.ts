@@ -10,8 +10,10 @@ export class UserRepository {
   async createUser() {
     const result = await this.userModel.create();
 
-    console.log(result);
-
     return result;
+  }
+
+  async findById(userId: number) {
+    return await this.userModel.findByPk(userId);
   }
 }

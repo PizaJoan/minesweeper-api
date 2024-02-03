@@ -9,4 +9,8 @@ export class UserService {
   async initUser() {
     return await this.userRepository.createUser();
   }
+
+  async findById(userId: number) {
+    return await this.userRepository.findById(userId);
+  }
 }

@@ -10,5 +10,6 @@ import { UserService } from './user.service';
   imports: [SequelizeModule.forFeature([User])],
   providers: [UserService, UserRepository],
   controllers: [UserController],
+  exports: [UserService],
 })
 export class UsersModule {}

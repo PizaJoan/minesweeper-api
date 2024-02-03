@@ -1,1 +1,1 @@
-export const USER_KEY = 'user';
+export const COOKIE_KEY = 'user';
