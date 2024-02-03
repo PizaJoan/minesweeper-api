@@ -1,10 +1,11 @@
 import { Controller, Get, Res } from '@nestjs/common';
 import { Response } from 'express';
 
-import { UserService } from './user.service';
+import { USER_KEY } from 'src/constants/cookie';
 import { Cookies } from 'src/decorators/cookies.decorator';
-import { YEAR } from 'src/constants/miliseconds';
+import { createDate } from 'src/lib/date';
 import { User } from './user.model';
+import { UserService } from './user.service';
 
 @Controller('/user')
 export class UserController {
@@ -17,8 +18,8 @@ export class UserController {
   ) {
     if (!user) {
       user = await this.userService.initUser();
-      response.cookie('user', user.toJSON(), {
-        expires: new Date(Date.now() + YEAR),
+      response.cookie(USER_KEY, user.toJSON(), {
+        expires: createDate(),
       });
     }
 
