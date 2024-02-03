@@ -3,9 +3,11 @@ import { SequelizeModule } from '@nestjs/sequelize';
 
 import { GameHistory } from './game-history.model';
 import { GameHistoryRepository } from './game-history.repository';
+import { GameHistoryService } from './game-history.service';
 
 @Module({
   imports: [SequelizeModule.forFeature([GameHistory])],
-  providers: [GameHistoryRepository],
+  providers: [GameHistoryService, GameHistoryRepository],
+  exports: [GameHistoryService],
 })
 export class GameHistoryModule {}

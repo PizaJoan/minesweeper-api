@@ -12,3 +12,9 @@ export interface InitGameDTO {
   rows?: number;
   cols?: number;
 }
+
+export interface PlayDTO {
+  row: number;
+  col: number;
+  bomb?: boolean;
+}

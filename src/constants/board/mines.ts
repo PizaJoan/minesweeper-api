@@ -6,3 +6,5 @@ export const MINES: Record<Difficulty, number> = {
   [Difficulty.hard]: 99,
   [Difficulty.custom]: 320,
 };
+
+export const MINE_VALUE = -1;

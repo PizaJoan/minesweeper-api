@@ -5,19 +5,22 @@ import { BoardService } from 'src/board/board.service';
 import { COOKIE_KEY } from 'src/constants/cookie';
 import { MinesweeperCookie } from 'src/cookies/types';
 import { Cookies } from 'src/decorators/cookies.decorator';
+import { GameHistoryService } from 'src/game-history/game-history.service';
+
 import { createDate } from 'src/lib/date';
 import { GameService } from './game.service';
-import { InitGameDTO } from './game.types';
+import { InitGameDTO, PlayDTO } from './game.types';
 
 @Controller('/game')
 export class GameController {
   constructor(
     private gameService: GameService,
     private boardService: BoardService,
+    private gameHistoryService: GameHistoryService,
   ) {}
 
   @Post('/init')
-  async initUser(
+  async init(
     @Cookies(COOKIE_KEY) cookie: MinesweeperCookie,
     @Res({ passthrough: true }) response: Response,
     @Body() initGameDto: InitGameDTO,
@@ -34,5 +37,22 @@ export class GameController {
     );
 
     return board;
+  }
+
+  @Post('/play')
+  async play(
+    @Cookies(COOKIE_KEY) cookie: MinesweeperCookie,
+    @Body() cell: PlayDTO,
+  ) {
+    const game = (await this.gameService.findByIdWithBoard(cookie.gameId!))!;
+
+    cell.bomb = this.boardService.checkBomb(game.board, cell);
+
+    await this.gameHistoryService.addHistory(
+      (await this.gameService.findById(cookie.gameId!))!,
+      cell,
+    );
+
+    return { status: (await this.gameService.play(game, cell)).status };
   }
 }

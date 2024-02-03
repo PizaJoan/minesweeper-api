@@ -1,15 +1,20 @@
 import { Injectable } from '@nestjs/common';
 
 import { BOMB_PROXIMITY } from 'src/constants/board/bomb-proximity';
-import { MINES } from 'src/constants/board/mines';
+import { MINES, MINE_VALUE } from 'src/constants/board/mines';
 import { COLS, ROWS } from 'src/constants/board/size';
-import { InitGameDTO } from 'src/game/game.types';
+import { InitGameDTO, PlayDTO } from 'src/game/game.types';
+import { Board } from './board.model';
 import { BoardRepository } from './board.repository';
 import { Difficulty } from './board.types';
 
 @Injectable()
 export class BoardService {
   constructor(private boardRepository: BoardRepository) {}
+
+  checkBomb(board: Board, cell: PlayDTO) {
+    return board.jsonBoard[cell.row][cell.col] === MINE_VALUE;
+  }
 
   async initBoard({ difficulty, rows, cols }: InitGameDTO) {
     const [boardRows, boardCols] =
@@ -65,7 +70,7 @@ export class BoardService {
       const secondNum = Math.floor(Math.random() * board[0].length);
 
       if (board[firstNum][secondNum] !== -1) {
-        board[firstNum][secondNum] = -1;
+        board[firstNum][secondNum] = MINE_VALUE;
 
         for (let i = 0; i < BOMB_PROXIMITY.length; i++) {
           const [row, col] = BOMB_PROXIMITY[i];
