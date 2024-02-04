@@ -24,6 +24,9 @@ export class Board extends Model {
   @Column({ defaultValue: 9 })
   cols: number;
 
+  @Column({ defaultValue: 10 })
+  mines: number;
+
   @Column(DataTypes.ENUM(typeof Difficulty))
   difficulty: Difficulty;
 

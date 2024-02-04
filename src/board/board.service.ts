@@ -31,6 +31,7 @@ export class BoardService {
     return await this.boardRepository.createBoard({
       rows: boardRows,
       cols: boardCols,
+      mines,
       difficulty,
       board,
     });

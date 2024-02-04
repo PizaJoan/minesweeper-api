@@ -8,6 +8,7 @@ export enum Difficulty {
 export interface CreateBoardDTO {
   rows: number;
   cols: number;
+  mines: number;
   difficulty: Difficulty;
   board: number[][];
 }

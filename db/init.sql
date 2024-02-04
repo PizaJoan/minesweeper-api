@@ -15,6 +15,7 @@ CREATE TABLE
     `id` INT NOT NULL AUTO_INCREMENT,
     `rows` INT DEFAULT 9,
     `cols` INT DEFAULT 9,
+    `mines` INT DEFAULT 10,
     `difficulty` ENUM ('easy', 'medium', 'hard', 'custom') NOT NULL,
     `json_board` JSON NOT NULL,
     PRIMARY KEY (`id`)
@@ -45,3 +46,5 @@ CREATE TABLE
     PRIMARY KEY (`id`, `game_id`),
     CONSTRAINT `game_history_game_id` FOREIGN KEY (`game_id`) REFERENCES `game` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
   );
+
+-- ALTER TABLE `board` ADD COLUMN `mines` INT DEFAULT 10 AFTER `cols`;
