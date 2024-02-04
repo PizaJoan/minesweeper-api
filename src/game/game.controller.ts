@@ -30,7 +30,7 @@ export class GameController {
 
     response.cookie(
       COOKIE_KEY,
-      { ...cookie, game: game.id },
+      { ...cookie, gameId: game.id },
       {
         expires: createDate(),
       },
@@ -44,14 +44,20 @@ export class GameController {
     @Cookies(COOKIE_KEY) cookie: MinesweeperCookie,
     @Body() cell: PlayDTO,
   ) {
-    const game = (await this.gameService.findByIdWithBoard(cookie.gameId!))!;
+    const game = await this.gameService.findByIdWithBoard(cookie.gameId!);
+
+    if (
+      !game ||
+      (await this.gameHistoryService.alreadyPlayedCell(game, cell))
+    ) {
+      return {
+        status: 'Invalid selection',
+      };
+    }
 
     cell.bomb = this.boardService.checkBomb(game.board, cell);
 
-    await this.gameHistoryService.addHistory(
-      (await this.gameService.findById(cookie.gameId!))!,
-      cell,
-    );
+    await this.gameHistoryService.addHistory(game, cell);
 
     return { status: (await this.gameService.play(game, cell)).status };
   }

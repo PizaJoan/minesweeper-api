@@ -11,4 +11,12 @@ export class GameHistoryService {
   async addHistory(game: Game, cell: PlayDTO) {
     await this.gameHistoryRepository.addHistory(game, cell);
   }
+
+  async alreadyPlayedCell(game: Game, cell: PlayDTO) {
+    return !!(await this.gameHistoryRepository.findByGameId(game.id, cell));
+  }
+
+  async getHistory(game: Game) {
+    return await this.gameHistoryRepository.getHistory(game);
+  }
 }

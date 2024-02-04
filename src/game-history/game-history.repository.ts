@@ -16,7 +16,26 @@ export class GameHistoryRepository {
       gameId: game.id,
       selectedRow: cell.row,
       selectedCol: cell.col,
-      bonmb: cell.bomb,
+      bomb: cell.bomb,
+    });
+  }
+
+  async findByGameId(gameId: number, cell: PlayDTO) {
+    return await this.gameHistoryModel.findOne({
+      where: {
+        gameId: gameId,
+        selectedRow: cell.row,
+        selectedCol: cell.col,
+      },
+    });
+  }
+
+  async getHistory(game: Game) {
+    return await this.gameHistoryModel.findAndCountAll({
+      where: {
+        gameId: game.id,
+        bomb: false,
+      },
     });
   }
 }
