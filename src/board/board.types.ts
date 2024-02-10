@@ -1,8 +1,8 @@
 export enum Difficulty {
-  easy = 'easy',
-  medium = 'medium',
-  hard = 'hard',
-  custom = 'custom',
+  easy = 'EASY',
+  medium = 'MEDIUM',
+  hard = 'HARD',
+  custom = 'CUSTOM',
 }
 
 export interface CreateBoardDTO {
