@@ -21,8 +21,20 @@ export class GameRepository {
     return result;
   }
 
-  async findById(gameId: number, options?: { includeBoard: boolean }) {
-    const include = options?.includeBoard ? { include: Board } : undefined;
+  async findById(
+    gameId: number,
+    options?: { includeBoard?: boolean; includeUser?: boolean },
+  ) {
+    const include = options
+      ? {
+          include: [
+            { type: Board, include: options.includeBoard },
+            { type: User, include: options.includeUser },
+          ]
+            .filter(({ include }) => include)
+            .map(({ type }) => type),
+        }
+      : undefined;
 
     return await this.gameModel.findByPk(gameId, include);
   }

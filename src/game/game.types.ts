@@ -14,7 +14,7 @@ export interface InitGameDTO extends UserDTO {
   cols?: number;
 }
 
-export interface PlayDTO {
+export interface PlayDTO extends UserDTO {
   gameId: number;
   row: number;
   col: number;

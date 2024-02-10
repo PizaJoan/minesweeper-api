@@ -25,6 +25,13 @@ export class GameService {
     return await this.gameRepository.findById(gameId, { includeBoard: true });
   }
 
+  async findByIdWithBoardAndUser(gameId: number) {
+    return await this.gameRepository.findById(gameId, {
+      includeBoard: true,
+      includeUser: true,
+    });
+  }
+
   async initGame(userId: number, board: Board) {
     const game = await this.gameRepository.initGame(
       (await this.userService.findById(userId))!,

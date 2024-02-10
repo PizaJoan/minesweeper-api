@@ -28,10 +28,11 @@ export class GameController {
 
   @Post('/play')
   async play(@Body() cell: PlayDTO) {
-    const game = await this.gameService.findByIdWithBoard(cell.gameId!);
+    const game = await this.gameService.findByIdWithBoardAndUser(cell.gameId!);
 
     if (
       !game ||
+      cell.userId !== game.user.id ||
       (await this.gameHistoryService.alreadyPlayedCell(game, cell))
     ) {
       return {
