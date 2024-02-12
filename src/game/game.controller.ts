@@ -1,7 +1,8 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Post, Res, UsePipes } from '@nestjs/common';
 import { Response } from 'express';
 
 import { BoardService } from 'src/board/board.service';
+import { StringToInteger } from 'src/decorators/pipes/stringToInteger';
 import { GameHistoryService } from 'src/game-history/game-history.service';
 
 import { GameService } from './game.service';
@@ -27,13 +28,14 @@ export class GameController {
   }
 
   @Post('/play')
+  @UsePipes(new StringToInteger())
   async play(@Body() cell: PlayDTO) {
     const game = await this.gameService.findByIdWithBoardAndUser(cell.gameId!);
 
     if (
       !game ||
       cell.userId !== game.user.id ||
-      (await this.gameHistoryService.alreadyPlayedCell(game, cell))
+      (await this.gameHistoryService.alreadyPlayedCell(game!, cell))
     ) {
       return {
         status: 'Invalid selection',
