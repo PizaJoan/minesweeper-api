@@ -57,6 +57,10 @@ export class GameRepository {
           model: Board,
           attributes: ['difficulty', 'rows', 'cols'],
         },
+        {
+          model: User,
+          attributes: ['name'],
+        },
       ],
     });
   }
