@@ -4,6 +4,7 @@ import { Board } from 'src/board/board.model';
 import { Difficulty } from 'src/board/board.types';
 import { POINTS_MULTIPLIERS } from 'src/constants/game/points';
 import { GameHistoryService } from 'src/game-history/game-history.service';
+import { PaginationOptions } from 'src/types/pagination';
 import { UserService } from 'src/user/user.service';
 import { Game } from './game.model';
 import { GameRepository } from './game.repository';
@@ -48,6 +49,16 @@ export class GameService {
     if (game.status !== Status.lost) game.score = this.computePoints(game);
 
     return await game.save();
+  }
+
+  async findByStatusWithUserPaginated(
+    status: Status,
+    options: PaginationOptions,
+  ) {
+    return await this.gameRepository.findByStatusWithUserPaginated(
+      status,
+      options,
+    );
   }
 
   private async checkGameStatus(game: Game, cell: PlayDTO) {

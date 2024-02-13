@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
 import { Board } from 'src/board/board.model';
+import { PaginationOptions } from 'src/types/pagination';
 import { User } from 'src/user/user.model';
 import { Game } from './game.model';
 import { Status } from './game.types';
@@ -37,5 +38,26 @@ export class GameRepository {
       : undefined;
 
     return await this.gameModel.findByPk(gameId, include);
+  }
+
+  async findByStatusWithUserPaginated(
+    status: Status,
+    options: PaginationOptions,
+  ) {
+    return await this.gameModel.findAll({
+      where: {
+        status: status,
+      },
+      order: [[options.orderBy, options.order]],
+      attributes: ['time', 'status', 'score'],
+      limit: options.limit,
+      offset: (options.page - 1) * options.limit,
+      include: [
+        {
+          model: Board,
+          attributes: ['difficulty', 'rows', 'cols'],
+        },
+      ],
+    });
   }
 }

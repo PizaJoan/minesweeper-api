@@ -1,12 +1,22 @@
-import { Body, Controller, Post, Res, UsePipes } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  ParseIntPipe,
+  Post,
+  Query,
+  Res,
+  UsePipes,
+} from '@nestjs/common';
 import { Response } from 'express';
 
 import { BoardService } from 'src/board/board.service';
 import { StringToInteger } from 'src/decorators/pipes/stringToInteger';
 import { GameHistoryService } from 'src/game-history/game-history.service';
 
+import { Order } from 'src/types/pagination';
 import { GameService } from './game.service';
-import { InitGameDTO, PlayDTO } from './game.types';
+import { InitGameDTO, PlayDTO, Status } from './game.types';
 
 @Controller('/game')
 export class GameController {
@@ -47,5 +57,21 @@ export class GameController {
     await this.gameHistoryService.addHistory(game, cell);
 
     return { status: (await this.gameService.play(game, cell)).status };
+  }
+
+  @Get('/leaderboard')
+  async leaderBoard(
+    @Query('status') status: Status = Status.won,
+    @Query('page', new ParseIntPipe({ optional: true })) page: number = 1,
+    @Query('order') order: Order = Order.desc,
+  ) {
+    const games = await this.gameService.findByStatusWithUserPaginated(status, {
+      page,
+      limit: 20,
+      orderBy: 'score',
+      order,
+    });
+
+    return games;
   }
 }
