@@ -7,8 +7,8 @@ import { User } from './user.model';
 export class UserRepository {
   constructor(@InjectModel(User) private userModel: typeof User) {}
 
-  async createUser() {
-    const result = await this.userModel.create();
+  async createUser(name: string) {
+    const result = await this.userModel.create({ name });
 
     return result;
   }
