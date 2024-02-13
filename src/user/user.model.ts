@@ -16,6 +16,9 @@ export class User extends Model {
   @Column
   id: number;
 
+  @Column
+  name: string;
+
   @Column({ field: 'creation_date', defaultValue: Date.now() })
   creationDate: Date;
 

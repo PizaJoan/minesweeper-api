@@ -6,6 +6,7 @@ USE minesweeper;
 CREATE TABLE
   IF NOT EXISTS `user` (
     `id` INT NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(60),
     `creation_date` DATETIME (6) NOT NULL,
     PRIMARY KEY (`id`)
   );
@@ -48,3 +49,4 @@ CREATE TABLE
   );
 
 -- ALTER TABLE `board` ADD COLUMN `mines` INT DEFAULT 10 AFTER `cols`;
+-- ALTER TABLE `user` ADD COLUMN `name` VARCHAR(60) AFTER `id`;
