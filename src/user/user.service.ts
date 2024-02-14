@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { jwtDecode } from 'jwt-decode';
 
 import { UserRepository } from './user.respository';
 
@@ -12,7 +13,7 @@ export class UserService {
 
   async initUserWithToken(token: string, userId?: number) {
     // decode JWT Token
-    const name = `${token}`;
+    const { name } = jwtDecode<{ name: string }>(token);
 
     if (userId) {
       const user = await this.userRepository.findById(userId);
