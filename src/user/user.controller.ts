@@ -1,5 +1,6 @@
 import { Controller, Get, Query } from '@nestjs/common';
 
+import { User } from './user.model';
 import { UserService } from './user.service';
 
 @Controller('/user')
@@ -11,18 +12,14 @@ export class UserController {
     @Query('userId') userId: number,
     @Query('token') token: string,
   ) {
+    let user: User;
     // Oauth flow
-    if (token) {
-      const user = await this.userService.initUserWithToken(token, userId);
-      return user.name;
-    }
-
+    if (token) user = await this.userService.initUserWithToken(token, userId);
     // Bare user
-    if (!userId) {
-      const user = await this.userService.initUser();
-      return user.id;
-    }
+    else if (!userId) user = await this.userService.initUser();
+    // Fallback
+    else user = (await this.userService.findById(userId))!;
 
-    return userId;
+    return { id: user.id, name: user.name };
   }
 }
