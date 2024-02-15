@@ -13,18 +13,32 @@ export class UserService {
 
   async initUserWithToken(token: string, userId?: number) {
     // decode JWT Token
-    const { name } = jwtDecode<{ name: string }>(token);
+    const { name, email } = jwtDecode<{ name: string; email: string }>(token);
 
-    if (userId) {
-      const user = await this.userRepository.findById(userId);
+    const foundUser = await this.userRepository.findByEmailOrId(
+      email,
+      userId ?? 0,
+    );
 
-      user!.name = name;
-      await user?.save();
+    if (foundUser) {
+      if (userId && userId !== foundUser.id) {
+        await this.userRepository.removeUser(userId);
+      }
 
-      return user!;
+      if (foundUser.name !== name) {
+        foundUser.name = name;
+        await foundUser.save();
+      }
+
+      if (!foundUser.email || foundUser.email !== email) {
+        foundUser.email = email;
+        await foundUser.save();
+      }
+
+      return foundUser;
     }
 
-    return await this.userRepository.createUser(name);
+    return await this.userRepository.createUserWithEmail(name, email);
   }
 
   async findById(userId: number) {

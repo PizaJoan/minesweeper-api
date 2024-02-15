@@ -16,9 +16,9 @@ export class UserController {
     // Oauth flow
     if (token) user = await this.userService.initUserWithToken(token, userId);
     // Bare user
-    else if (!userId) user = await this.userService.initUser();
+    else if (userId) user = (await this.userService.findById(userId))!;
     // Fallback
-    else user = (await this.userService.findById(userId))!;
+    else user = await this.userService.initUser();
 
     return { id: user.id, name: user.name };
   }

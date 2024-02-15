@@ -19,6 +19,9 @@ export class User extends Model {
   @Column
   name: string;
 
+  @Column
+  email: string;
+
   @Column({ field: 'creation_date', defaultValue: Date.now() })
   creationDate: Date;
 
