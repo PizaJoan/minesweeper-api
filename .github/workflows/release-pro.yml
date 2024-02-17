@@ -57,7 +57,7 @@ jobs:
       - name: Zip dist
         run: tar -czvf app.tar.gz ./out
 
-      - name: Remove files
+      - name: Remove out
         run: rm -rf out
 
       - name: SCP artifact
@@ -83,7 +83,9 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd /home/ubuntu/services/backend
-            tar -xzvf app.tar.gz .
+            tar -xzvf app.tar.gz
+            mv out .
+            rmdir out
             rm app.tar.gz
             docker build -t minesweeper:api .
             docker run -d -e DB_HOST=$DB_HOST -e DB_PORT=$DB_PORT -e DB_USER=$DB_USER -e DB_PASSWORD=$DB_PASSWORD -e DB_DATABASE=$DB_DATABASE minesweeper:api
