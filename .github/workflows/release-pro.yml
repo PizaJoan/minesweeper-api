@@ -11,7 +11,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: lts
+          node-version: latest
           cache: npm
 
       - name: Install deppendencies
