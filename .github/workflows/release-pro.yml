@@ -42,6 +42,9 @@ jobs:
         with:
           name: backend-dist
 
+      - name: Add DB cert
+        run: echo "${{ secrets.DB_KEY }}" > cert.ca
+
       - name: Create out
         run: mkdir out
 
@@ -61,12 +64,23 @@ jobs:
           username: ${{ vars.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           source: app.tar.gz
-          target: /tmp
+          target: /backend
 
-      - name: connect to machine
+      - name: Connect to server
         uses: appleboy/ssh-action@v1.0.3
+        env:
+          DB_HOST: ${{ vars.DB_HOST }}
+          DB_PORT: ${{ vars.DB_PORT }}
+          DB_USER: ${{ vars.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_DATABASE: ${{ vars.DB_DATABASE }}
         with:
           host: ${{ vars.SSH_HOST }}
           username: ${{ vars.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          script: ls /tmp
+          script: |
+            cd /backend
+            tar -xvfz app.tar.gz .
+            rm app.tar.gz
+            docker build -t minesweeper:api .
+            docker run -d -e DB_HOST=$DB_HOST -e DB_PORT=$DB_PORT -e DB_USER=$DB_USER -e DB_PASSWORD=$DB_PASSWORD -e DB_DATABASE=$DB_DATABASE minesweeper:api

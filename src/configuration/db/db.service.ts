@@ -1,9 +1,12 @@
+import fs from 'fs';
+
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   SequelizeModuleOptions,
   SequelizeOptionsFactory,
 } from '@nestjs/sequelize';
+import { join } from 'path';
 
 @Injectable()
 export class DBConfigService implements SequelizeOptionsFactory {
@@ -14,7 +17,7 @@ export class DBConfigService implements SequelizeOptionsFactory {
   }
 
   createSequelizeOptions(): SequelizeModuleOptions {
-    return {
+    const config: SequelizeModuleOptions = {
       dialect: 'mysql',
       host: this.getEnvKEy('DB_HOST'),
       port: Number(this.getEnvKEy('DB_PORT')),
@@ -24,5 +27,15 @@ export class DBConfigService implements SequelizeOptionsFactory {
       autoLoadModels: true,
       synchronize: true,
     };
+
+    if (this.getEnvKEy('ISPROD')) {
+      config.dialectOptions = {
+        ssl: {
+          ca: fs.readFileSync(join(__dirname, 'cert.ca')).toString(),
+        },
+      };
+    }
+
+    return config;
   }
 }
