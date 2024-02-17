@@ -43,20 +43,21 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: backend-dist
+      - run: ls -R
 
-      - name: SCP artifact
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ vars.SSH_HOST }}
-          username: ${{ vars.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          source: dist
-          target: /tmp
+      # - name: SCP artifact
+      #   uses: appleboy/scp-action@v0.1.7
+      #   with:
+      #     host: ${{ vars.SSH_HOST }}
+      #     username: ${{ vars.SSH_USER }}
+      #     key: ${{ secrets.SSH_KEY }}
+      #     source: dist
+      #     target: /tmp
 
-      - name: connect to machine
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ vars.SSH_HOST }}
-          username: ${{ vars.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          script: ls /tmp
+      # - name: connect to machine
+      #   uses: appleboy/ssh-action@v1.0.3
+      #   with:
+      #     host: ${{ vars.SSH_HOST }}
+      #     username: ${{ vars.SSH_USER }}
+      #     key: ${{ secrets.SSH_KEY }}
+      #     script: ls /tmp
