@@ -26,8 +26,6 @@ jobs:
       - name: Build
         run: pnpm run build
 
-      - run: ls
-
       # I may need to add the dockerfile so it can build the image after
       - name: Push artifact
         uses: actions/upload-artifact@v4
@@ -43,21 +41,26 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: backend-dist
-      - run: ls -R
 
-      # - name: SCP artifact
-      #   uses: appleboy/scp-action@v0.1.7
-      #   with:
-      #     host: ${{ vars.SSH_HOST }}
-      #     username: ${{ vars.SSH_USER }}
-      #     key: ${{ secrets.SSH_KEY }}
-      #     source: dist
-      #     target: /tmp
+      - name: Zip dist
+        run: tar -czvf app.tar.gz .
 
-      # - name: connect to machine
-      #   uses: appleboy/ssh-action@v1.0.3
-      #   with:
-      #     host: ${{ vars.SSH_HOST }}
-      #     username: ${{ vars.SSH_USER }}
-      #     key: ${{ secrets.SSH_KEY }}
-      #     script: ls /tmp
+      - name: Remove files
+        run: rm -rf !(app.tar.gz)
+
+      - name: SCP artifact
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ vars.SSH_HOST }}
+          username: ${{ vars.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          source: app.tar.gz
+          target: /tmp
+
+      - name: connect to machine
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ vars.SSH_HOST }}
+          username: ${{ vars.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: ls /tmp
