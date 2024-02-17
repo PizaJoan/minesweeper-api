@@ -1,6 +1,6 @@
 FROM node:alpine
 
-COPY ./dist /backend/
+COPY . /backend/
 COPY package.json /backend/
 
 EXPOSE 3001
