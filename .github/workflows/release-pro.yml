@@ -1,0 +1,24 @@
+name: Release
+run-name: Build & Release
+on:
+  push:
+    branches:
+      - 'release-**'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: lts
+          cache: npm
+
+      - name: Install deppendencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+  # deploy:
+  #   needs: [build]
