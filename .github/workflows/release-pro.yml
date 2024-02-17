@@ -33,7 +33,7 @@ jobs:
       - name: connect to machine
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: '${{ vars.SHH_HOST }}'
+          host: ${{ vars.SSH_HOST }}
           username: ${{ vars.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: whoami
