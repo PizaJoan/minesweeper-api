@@ -1,10 +1,14 @@
-name: Test
-run-name: Testing
+name: Release
+run-name: Build & Release
 on:
   push:
-    branches: ['main']
+    branches:
+      - 'release-**'
 jobs:
-  example-jobs:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Hola bones tardes"
+      - run: npm run build
+
+  # deploy:
+  #   needs: [build]
