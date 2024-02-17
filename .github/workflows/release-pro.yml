@@ -77,20 +77,19 @@ jobs:
           DB_USER: ${{ vars.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DB_DATABASE: ${{ vars.DB_DATABASE }}
+          DOCKER_IMAGE: minesweeper:api
         with:
           host: ${{ vars.SSH_HOST }}
           username: ${{ vars.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          envs: DB_HOST,DB_PORT,DB_USER,DB_PASSWORD,DB_DATABASE
+          envs: DB_HOST,DB_PORT,DB_USER,DB_PASSWORD,DB_DATABASE,DOCKER_IMAGE
           script: |
+            docker stop $(docker ps -aq -f "ancestor=$DOCKER_IMAGE")
+            docker rm $(docker ps -aq -f "ancestor=$DOCKER_IMAGE") 2> /dev/null & docker rmi $(docker images -aq -f "reference=$DOCKER_IMAGE") 2> /dev/null
             cd /home/ubuntu/services/backend
             tar -xzvf app.tar.gz
             mv out/dist/* .
             mv out/* .
-            rm -rf out
-            rm -rf dist
-            rm app.tar.gz
-            docker build -t minesweeper:api .
-            docker run -d -p 3001:3001 -e DB_HOST=$DB_HOST -e DB_PORT=$DB_PORT -e DB_USER=$DB_USER -e DB_PASSWORD=$DB_PASSWORD -e DB_DATABASE=$DB_DATABASE minesweeper:api
-          # mkdir .env
-          # echo "ISPROD=true" > .env/.env.production
+            docker build -t $DOCKER_IMAGE .
+            docker run -d -p 3001:3001 -e DB_HOST=$DB_HOST -e DB_PORT=$DB_PORT -e DB_USER=$DB_USER -e DB_PASSWORD=$DB_PASSWORD -e DB_DATABASE=$DB_DATABASE $DOCKER_IMAGE
+            rm -rf *
