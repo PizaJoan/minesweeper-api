@@ -91,6 +91,6 @@ jobs:
             rm -rf dist
             rm app.tar.gz
             docker build -t minesweeper:api .
-            docker run -d -e DB_HOST=$DB_HOST -e DB_PORT=$DB_PORT -e DB_USER=$DB_USER -e DB_PASSWORD=$DB_PASSWORD -e DB_DATABASE=$DB_DATABASE minesweeper:api
+            docker run -d -p 3001:3001 -e DB_HOST=$DB_HOST -e DB_PORT=$DB_PORT -e DB_USER=$DB_USER -e DB_PASSWORD=$DB_PASSWORD -e DB_DATABASE=$DB_DATABASE minesweeper:api
           # mkdir .env
           # echo "ISPROD=true" > .env/.env.production
