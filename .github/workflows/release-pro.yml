@@ -5,35 +5,56 @@ on:
     branches:
       - 'release-**'
 jobs:
-  # build:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-
-  #     - name: Setup node
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         node-version: latest
-
-  #     - uses: pnpm/action-setup@v3
-  #       name: Setup pnpm
-  #       with:
-  #         version: 8
-
-  #     - name: Install deppendencies
-  #       run: pnpm install
-
-  #     - name: Build
-  #       run: pnpm run build
-
-  deploy:
-    # needs: build
+  build:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: latest
+
+      - uses: pnpm/action-setup@v3
+        name: Setup pnpm
+        with:
+          version: 8
+
+      - name: Install deppendencies
+        run: pnpm install
+
+      - name: Build
+        run: pnpm run build
+
+      # I may need to add the dockerfile so it can build the image after
+      - name: Push artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-dist
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-dist
+
+      - name: SCP artifact
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ vars.SSH_HOST }}
+          username: ${{ vars.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          source: 'dist'
+          target: /tmp
+
       - name: connect to machine
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ vars.SSH_HOST }}
           username: ${{ vars.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          script: whoami
+          script: ls /tmp
