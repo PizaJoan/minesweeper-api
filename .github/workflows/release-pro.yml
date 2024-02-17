@@ -52,7 +52,7 @@ jobs:
         run: tar -czvf app.tar.gz ./out
 
       - name: Remove files
-        run: rm -rf !(app.tar.gz)
+        run: rm -rf out
 
       - name: SCP artifact
         uses: appleboy/scp-action@v0.1.7
