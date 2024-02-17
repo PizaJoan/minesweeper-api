@@ -30,7 +30,7 @@ jobs:
     # needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: connect to machine
+      - name: ${{ vars.SSH_USER }}
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ vars.SHH_HOST }}
