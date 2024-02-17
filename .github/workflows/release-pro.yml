@@ -42,8 +42,11 @@ jobs:
         with:
           name: backend-dist
 
-      run: mkdir out
-      run: mv $(ls | grep -v out) out
+      - name: Create out
+        run: mkdir out
+
+      - name: Move to out
+        run: mv $(ls | grep -v out) out
 
       - name: Zip dist
         run: tar -czvf app.tar.gz ./out
