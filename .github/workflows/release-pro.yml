@@ -35,7 +35,6 @@ jobs:
             dist
             package.json
             Dockerfile
-            .env
 
   deploy:
     needs: build
@@ -82,6 +81,7 @@ jobs:
           host: ${{ vars.SSH_HOST }}
           username: ${{ vars.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
+          envs: DB_HOST,DB_PORT,DB_USER,DB_PASSWORD,DB_DATABASE
           script: |
             cd /home/ubuntu/services/backend
             tar -xzvf app.tar.gz
@@ -90,5 +90,7 @@ jobs:
             rm -rf out
             rm -rf dist
             rm app.tar.gz
+          # mkdir .env
+          # echo "ISPROD=true" > .env/.env.production
             docker build -t minesweeper:api .
             docker run -d -e DB_HOST=$DB_HOST -e DB_PORT=$DB_PORT -e DB_USER=$DB_USER -e DB_PASSWORD=$DB_PASSWORD -e DB_DATABASE=$DB_DATABASE minesweeper:api
