@@ -64,7 +64,7 @@ jobs:
           username: ${{ vars.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           source: app.tar.gz
-          target: /backend
+          target: /var/www/server
 
       - name: Connect to server
         uses: appleboy/ssh-action@v1.0.3
@@ -79,7 +79,7 @@ jobs:
           username: ${{ vars.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd /backend
+            cd /var/www/server
             tar -xvfz app.tar.gz .
             rm app.tar.gz
             docker build -t minesweeper:api .
