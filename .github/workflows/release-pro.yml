@@ -16,9 +16,9 @@ jobs:
           node-version: latest
 
       - uses: pnpm/action-setup@v3
-      name: Setup pnpm
-          with:
-            version: 8
+        name: Setup pnpm
+        with:
+          version: 8
 
       - name: Install deppendencies
         run: pnpm ci
