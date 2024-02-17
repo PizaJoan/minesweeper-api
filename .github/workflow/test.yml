@@ -1,8 +1,10 @@
 name: Test
 run-name: Testing
-on: [push]
+on:
+  push:
+    branches: ['main']
 jobs:
-  Explore-Github-Actions:
+  example-jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "Hola bones tardes"
