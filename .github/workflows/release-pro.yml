@@ -26,6 +26,8 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      - run: ls
+
       # I may need to add the dockerfile so it can build the image after
       - name: Push artifact
         uses: actions/upload-artifact@v4
@@ -48,7 +50,7 @@ jobs:
           host: ${{ vars.SSH_HOST }}
           username: ${{ vars.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          source: 'dist'
+          source: dist
           target: /tmp
 
       - name: connect to machine
