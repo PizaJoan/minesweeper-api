@@ -84,8 +84,10 @@ jobs:
           script: |
             cd /home/ubuntu/services/backend
             tar -xzvf app.tar.gz
+            mv out/dist/* .
+            rmdir out/dist
             mv out/* .
             rmdir out
             rm app.tar.gz
-            docker build -t minesweeper:api .
-            docker run -d -e DB_HOST=$DB_HOST -e DB_PORT=$DB_PORT -e DB_USER=$DB_USER -e DB_PASSWORD=$DB_PASSWORD -e DB_DATABASE=$DB_DATABASE minesweeper:api
+          # docker build -t minesweeper:api .
+          # docker run -d -e DB_HOST=$DB_HOST -e DB_PORT=$DB_PORT -e DB_USER=$DB_USER -e DB_PASSWORD=$DB_PASSWORD -e DB_DATABASE=$DB_DATABASE minesweeper:api
