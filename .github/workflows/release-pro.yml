@@ -35,6 +35,7 @@ jobs:
             dist
             package.json
             Dockerfile
+            .env
 
   deploy:
     needs: build
