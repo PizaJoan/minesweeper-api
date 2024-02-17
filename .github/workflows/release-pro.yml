@@ -35,5 +35,5 @@ jobs:
         with:
           host: ${{ vars.SHH_HOST }}
           username: ${{ vars.SSH_USER }}
-          key: ${{ private.SSH_KEY }}
+          key: ${{ secrets.SSH_KEY }}
           script: whoami
