@@ -16,7 +16,7 @@ import { GameHistoryService } from 'src/game-history/game-history.service';
 
 import { Order } from 'src/types/pagination';
 import { GameService } from './game.service';
-import { InitGameDTO, PlayDTO, Status } from './game.types';
+import { InitGameDTO, PlayBulkDTO, PlayDTO, Status } from './game.types';
 
 @Controller('/game')
 export class GameController {
@@ -35,6 +35,31 @@ export class GameController {
     const game = await this.gameService.initGame(initGameDto.userId, board);
 
     return { board, game };
+  }
+
+  @Post('/play/bulk')
+  @UsePipes(new StringToInteger())
+  async playBulk(@Body() { cells, gameId, userId }: PlayBulkDTO) {
+    const game = await this.gameService.findByIdWithBoardAndUser(gameId!);
+
+    if (
+      !game ||
+      userId !== game.user.id ||
+      (await this.gameHistoryService.alreadyPlayedCells(game!, cells))
+    ) {
+      return {
+        status: 'Invalid selection',
+      };
+    }
+
+    cells = cells.map((cell) => ({
+      ...cell,
+      bomb: this.boardService.checkBomb(game.board, cell as PlayDTO),
+    }));
+
+    await this.gameHistoryService.addHistoryBulk(game, cells);
+
+    return { status: (await this.gameService.playBulk(game, cells)).status };
   }
 
   @Post('/play')

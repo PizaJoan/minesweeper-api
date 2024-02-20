@@ -20,3 +20,10 @@ export interface PlayDTO extends UserDTO {
   col: number;
   bomb?: boolean;
 }
+
+export type PlayBulkCells = Pick<PlayDTO, 'row' | 'col' | 'bomb'>[];
+
+export interface PlayBulkDTO extends UserDTO {
+  gameId: number;
+  cells: PlayBulkCells;
+}
