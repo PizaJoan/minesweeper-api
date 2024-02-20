@@ -8,7 +8,7 @@ import { PaginationOptions } from 'src/types/pagination';
 import { UserService } from 'src/user/user.service';
 import { Game } from './game.model';
 import { GameRepository } from './game.repository';
-import { PlayDTO, Status } from './game.types';
+import { PlayBulkCells, PlayDTO, Status } from './game.types';
 
 @Injectable()
 export class GameService {
@@ -51,6 +51,15 @@ export class GameService {
     return await game.save();
   }
 
+  async playBulk(game: Game, cells: PlayBulkCells) {
+    game.status = await this.checkGameStatus(
+      game,
+      (cells.find((cell) => cell.bomb) || cells[cells.length - 1]) as PlayDTO,
+    );
+
+    return await game.save();
+  }
+
   async findByStatusWithUserPaginated(
     status: Status,
     options: PaginationOptions,
@@ -64,8 +73,8 @@ export class GameService {
   private async checkGameStatus(game: Game, cell: PlayDTO) {
     if (
       !cell.bomb &&
-      game.board.mines ===
-        (await this.gameHistoryService.getHistory(game)).count + 1
+      game.board.rows * game.board.cols - game.board.mines ===
+        (await this.gameHistoryService.getHistory(game)).count
     )
       return Status.won;
 
