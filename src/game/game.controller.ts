@@ -92,7 +92,7 @@ export class GameController {
   ) {
     const games = await this.gameService.findByStatusWithUserPaginated(status, {
       page,
-      limit: 20,
+      limit: 8,
       orderBy: 'score',
       order,
     });
