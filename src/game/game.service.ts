@@ -44,7 +44,9 @@ export class GameService {
 
   async play(game: Game, cell: PlayDTO) {
     game.status = await this.checkGameStatus(game, cell);
-    game.time = Math.round((Date.now() - Number(game!.creationDate)) / 1000);
+    game.time = Math.round(
+      (Date.now() - Number(new Date(game!.creationDate))) / 1000,
+    );
 
     if (game.status !== Status.lost) game.score = this.computePoints(game);
 
